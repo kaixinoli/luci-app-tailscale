@@ -10,6 +10,7 @@ jobs:
       - name: 下载工具链
         run: |
           sudo timedatectl set-timezone Asia/Shanghai
+          sudo apt-get install gettext
           wget -qO /opt/sdk.tar.xz https://downloads.openwrt.org/releases/23.05.4/targets/x86/64/openwrt-sdk-23.05.4-x86-64_gcc-12.3.0_musl.Linux-x86_64.tar.xz
           tar -xJf /opt/sdk.tar.xz -C /opt
           cp -R ${{ github.workspace }} /opt/luci-app-tailscale
