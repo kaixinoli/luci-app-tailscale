@@ -10,19 +10,19 @@ jobs:
       - name: 下载工具链
         run: |
           sudo timedatectl set-timezone Asia/Shanghai
-          wget -qO /opt/sdk.tar.xz https://downloads.immortalwrt.org/releases/23.05.4/targets/x86/64/immortalwrt-sdk-23.05.4-x86-64_gcc-12.3.0_musl.Linux-x86_64.tar.xz
+          wget -qO /opt/sdk.tar.xz https://downloads.openwrt.org/releases/23.05.4/targets/x86/64/openwrt-sdk-23.05.4-x86-64_gcc-12.3.0_musl.Linux-x86_64.tar.xz
           tar -xJf /opt/sdk.tar.xz -C /opt
           cp -R ${{ github.workspace }} /opt/luci-app-tailscale
       - name: 开始编译
         run: |
-          cd /opt/immortalwrt-sdk*/package
+          cd /opt/openwrt-sdk*/package
           cp -R /opt/luci-app-tailscale .
-          cd /opt/immortalwrt-sdk*
+          cd /opt/openwrt-sdk*
           ./scripts/feeds update -a
           make defconfig
-          cd /opt/immortalwrt-sdk*
+          cd /opt/openwrt-sdk*
           make package/luci-app-tailscale/compile V=s -j1
-          cd /opt/immortalwrt-sdk*/bin/packages/*/base
+          cd /opt/openwrt-sdk*/bin/packages/*/base
           ls
           mv *.ipk /opt/luci-app-tailscale_1.2.3_all.ipk
       - name: 上传
