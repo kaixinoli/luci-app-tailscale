@@ -6,7 +6,16 @@ jobs:
  build:
     runs-on: ubuntu-latest
     steps:
+     # 步骤 1: 检出代码
       - uses: actions/checkout@v4
+     # 步骤 2: 安装编译所需的工具和依赖
+      - name: 安装依赖工具
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential gcc g++ ccache \
+            libncurses5-dev libssl-dev zlib1g-dev gawk gettext \
+            unzip file python3 wget git
+      # 步骤 3: 下载工具链            
       - name: 下载工具链
         run: |
           sudo timedatectl set-timezone Asia/Shanghai
@@ -14,6 +23,14 @@ jobs:
           wget -qO /opt/sdk.tar.xz https://downloads.openwrt.org/releases/23.05.4/targets/x86/64/openwrt-sdk-23.05.4-x86-64_gcc-12.3.0_musl.Linux-x86_64.tar.xz
           tar -xJf /opt/sdk.tar.xz -C /opt
           cp -R ${{ github.workspace }} /opt/luci-app-tailscale
+
+
+      # 步骤 4: 更新 feeds 和安装依赖
+      - name: 更新 Feeds 和安装依赖
+        run: |
+          cd /opt/openwrt-sdk-23.05.4-x86-64_gcc-12.3.0_musl.Linux-x86_64
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
       - name: 开始编译
         run: |
           cd /opt/openwrt-sdk*/package
